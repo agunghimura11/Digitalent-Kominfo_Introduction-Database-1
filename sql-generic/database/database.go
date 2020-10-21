@@ -42,7 +42,7 @@ func InsertCustomer (customer Customer, db *sql.DB){
 }
 
 func GetCustomers (db *sql.DB) {
-	rows, err := db.Query("select * from custumers")
+	rows, err := db.Query("select * from customers")
 	if err != nil {
 		log.Println(err.Error())
 		return
@@ -75,4 +75,24 @@ func GetCustomers (db *sql.DB) {
 	}
 
 	log.Println(result)
+}
+
+func DeleteCustomer( id int, db *sql.DB){
+	_, err := db.Exec("delete from customers where customer_id = ?", id)
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+
+	log.Println("success")
+}
+
+func UpdateCustomer ( age int, id int, db *sql.DB){
+	_, err := db.Exec("update customers set age = ? where customer_id = ?", age, id)
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+
+	log.Println("success update data")
 }

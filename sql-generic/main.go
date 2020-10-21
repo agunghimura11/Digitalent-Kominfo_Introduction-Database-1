@@ -23,19 +23,21 @@ func main(){
 		return
 	}
 
-	database.InsertCustomer(database.Customer{
-		FirstName: "Ari",
-		Lastname: "Sudana",
-		NpwpId: "npwp123",
-		Age: 20,
-		CustomerType: "Premium",
-		Street: "RingRoad",
-		City: "Bantul",
-		State: "Indonesia",
-		ZipCode: "123",
-		PhoneNumber: "08882828282",
-	}, db)
-
+	//database.InsertCustomer(database.Customer{
+	//	FirstName: "Ari",
+	//	Lastname: "Sudana",
+	//	NpwpId: "npwp123",
+	//	Age: 20,
+	//	CustomerType: "Premium",
+	//	Street: "RingRoad",
+	//	City: "Bantul",
+	//	State: "Indonesia",
+	//	ZipCode: "123",
+	//	PhoneNumber: "08882828282",
+	//}, db)
+	//database.UpdateCustomer(35,1,db)
+	database.DeleteCustomer(1, db)
+	database.GetCustomers(db)
 }
 
 func getConfig() (config.Config, error) {
