@@ -1,8 +1,10 @@
 package database
 
 import (
+	"github.com/pkg/errors"
 	"gorm.io/gorm"
 	"log"
+	"time"
 )
 
 type CustomerORM struct {
@@ -25,6 +27,39 @@ type  AccountORM struct {
 	IdCustomerRefer int `json:"-"`
 	Balance int `json:"balance"`
 	AccountType string `json:"account_type"`
+}
+
+type TranscORM struct {
+	ID int `gorm:"primary_key" json:"-"`
+	Date time.Time `json:"date"`
+	Type string `json:"type"` // transfer, debit, kredit
+	AccId int `json:"acc_id"`
+	Details []TranscDetail `gorm:"ForeignKey: IdTranscDetail" json:"transc_detail"`
+}
+
+type TranscDetail struct {
+	ID int `gorm:"primary_key" json:"-"`
+	IdTranscDetail int `json:"-"`
+	AccFrom string `json:"acc_from"`
+	AccTo string `json:"acc_to"`
+	Amount int `json:"amount"`
+}
+
+func GetTranscByID(id int,  db *gorm.DB) (*AccountORM,error) {
+	var acc AccountORM
+	if err := db.Model(&AccountORM{}).Where(&AccountORM{ID:id}).Find(&acc).Error; err != nil{
+		log.Println("Failed",err.Error())
+		return nil,errors.Errorf("invalid Token")
+	}
+	return &acc, nil
+}
+
+func AddTransc(tranc TranscORM, db *gorm.DB){
+	if err := db.Create(&tranc).Error; err != nil {
+		log.Println("Transaction Failed", err.Error())
+		return
+	}
+	log.Println("Transaction success!")
 }
 
 func InsertCustomer(customer CustomerORM, db *gorm.DB){

@@ -1,14 +1,15 @@
 package main
 
 import (
+	"DB/sql-generic/config"
+	"DB/sql-orm/database"
 	"fmt"
-	"github.com/FadhlanHawali/Digitalent-Kominfo_Introduction-Database-1/sql-generic/config"
-	"github.com/FadhlanHawali/Digitalent-Kominfo_Introduction-Database-1/sql-orm/database"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
+	"time"
 )
 
 func main(){
@@ -24,35 +25,59 @@ func main(){
 		return
 	}
 
-	//database.InsertCustomer(database.CustomerORM{
-	//	FirstName: "Aril",
-	//	Lastname: "Sudanopo",
-	//	NpwpId: "npwp123",
-	//	Age: 20,
-	//	CustomerType: "Premium",
-	//	Street: "RingRoad",
-	//	City: "Bantul",
-	//	State: "Indonesia",
-	//	ZipCode: "123",
-	//	PhoneNumber: "08882828282",
-	//	AccountORM: []database.AccountORM{
-	//		{
-	//			Balance: 1000,
-	//			AccountType: "Premium",
-	//		},
-	//		{
-	//			Balance:     1000000,
-	//			AccountType: "Deposito",
-	//		},
-	//	},
-	//}, db)
+	//insert customer data
+	database.InsertCustomer(database.CustomerORM{
+		FirstName: "Aril",
+		Lastname: "Sudanopo",
+		NpwpId: "npwp123",
+		Age: 20,
+		CustomerType: "Premium",
+		Street: "RingRoad",
+		City: "Bantul",
+		State: "Indonesia",
+		ZipCode: "123",
+		PhoneNumber: "08882828282",
+		AccountORM: []database.AccountORM{
+			{
+				Balance: 1000,
+				AccountType: "Premium",
+			},
+			{
+				Balance:     1000000,
+				AccountType: "Deposito",
+			},
+		},
+	}, db)
 
+	// Get data customer
 	//database.GetCustomer(db)
-	database.UpdateCustomer(database.CustomerORM{
-		FirstName: "Arielo",
-		Age: 12,
-		City: "Jakarta",
-	}, 1, db)
+
+	// Update Database
+	//database.UpdateCustomer(database.CustomerORM{
+	//	FirstName: "Arielo",
+	//	Age: 12,
+	//	City: "Jakarta",
+	//}, 1, db)
+
+	// get first data user account
+	acc, err := database.GetTranscByID(1, db)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	// add transaction
+	database.AddTransc(database.TranscORM{
+		Date: time.Now(),
+		Type: "Transfer",
+		AccId: acc.IdCustomerRefer, // id customer
+		Details: []database.TranscDetail{
+			{
+				AccFrom: "1",
+				AccTo: "3",
+				Amount: 10000,
+			},
+		},
+	}, db)
 }
 
 func getConfig() (config.Config, error) {
@@ -83,6 +108,8 @@ func initDB(dbConfig config.Database) (*gorm.DB, error) {
 	db.AutoMigrate(
 		&database.CustomerORM{},
 		&database.AccountORM{},
+		&database.TranscORM{},
+		&database.TranscDetail{},
 	)
 
 	log.Println("db successfully connected")
