@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/FadhlanHawali/Digitalent-Kominfo_Introduction-Database-1/sql-generic/config"
+	"github.com/FadhlanHawali/Digitalent-Kominfo_Introduction-Database-1/sql-generic/database"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/spf13/viper"
 	"log"
@@ -16,11 +17,25 @@ func main(){
 		return
 	}
 
-	_,err = connect(cfg.Database)
+	db,err := connect(cfg.Database)
 	if err != nil {
 		log.Println(err)
 		return
 	}
+
+	database.InsertCustomer(database.Customer{
+		FirstName: "Ari",
+		Lastname: "Sudana",
+		NpwpId: "npwp123",
+		Age: 20,
+		CustomerType: "Premium",
+		Street: "RingRoad",
+		City: "Bantul",
+		State: "Indonesia",
+		ZipCode: "123",
+		PhoneNumber: "08882828282",
+	}, db)
+
 }
 
 func getConfig() (config.Config, error) {
