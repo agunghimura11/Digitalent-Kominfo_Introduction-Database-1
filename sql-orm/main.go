@@ -24,31 +24,35 @@ func main(){
 		return
 	}
 
-	database.InsertCustomer(database.CustomerORM{
-		FirstName: "Aril",
-		Lastname: "Sudanopo",
-		NpwpId: "npwp123",
-		Age: 20,
-		CustomerType: "Premium",
-		Street: "RingRoad",
-		City: "Bantul",
-		State: "Indonesia",
-		ZipCode: "123",
-		PhoneNumber: "08882828282",
-		AccountORM: []database.AccountORM{
-			{
-				Balance: 1000,
-				AccountType: "Premium",
-			},
-			{
-				Balance:     1000000,
-				AccountType: "Deposito",
-			},
-		},
-	}, db)
+	//database.InsertCustomer(database.CustomerORM{
+	//	FirstName: "Aril",
+	//	Lastname: "Sudanopo",
+	//	NpwpId: "npwp123",
+	//	Age: 20,
+	//	CustomerType: "Premium",
+	//	Street: "RingRoad",
+	//	City: "Bantul",
+	//	State: "Indonesia",
+	//	ZipCode: "123",
+	//	PhoneNumber: "08882828282",
+	//	AccountORM: []database.AccountORM{
+	//		{
+	//			Balance: 1000,
+	//			AccountType: "Premium",
+	//		},
+	//		{
+	//			Balance:     1000000,
+	//			AccountType: "Deposito",
+	//		},
+	//	},
+	//}, db)
 
-	database.GetCustomer(db)
-
+	//database.GetCustomer(db)
+	database.UpdateCustomer(database.CustomerORM{
+		FirstName: "Arielo",
+		Age: 12,
+		City: "Jakarta",
+	}, 1, db)
 }
 
 func getConfig() (config.Config, error) {

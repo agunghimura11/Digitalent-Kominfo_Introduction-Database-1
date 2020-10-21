@@ -44,3 +44,21 @@ func GetCustomer (db *gorm.DB){
 	}
 	log.Println(customer)
 }
+
+func DeleteCustomer (id int, db *gorm.DB){
+	var customer CustomerORM
+	if err := db.Where(&CustomerORM{ID: id}).Delete(&customer).Error; err != nil {
+		log.Println("Failde to delete", err.Error())
+		return
+	}
+
+	log.Println("success delete data")
+}
+
+func UpdateCustomer(customer CustomerORM, id int, db *gorm.DB){
+	if err := db.Model(&CustomerORM{}).Where(&CustomerORM{ID:id}).Updates(customer).Error; err != nil {
+		log.Println("Failed to update", err.Error())
+		return
+	}
+	log.Println("SUccess")
+}
