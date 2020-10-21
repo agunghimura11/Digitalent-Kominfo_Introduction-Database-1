@@ -34,3 +34,13 @@ func InsertCustomer(customer CustomerORM, db *gorm.DB){
 	}
 	log.Println("Success Insert Data")
 }
+
+func GetCustomer (db *gorm.DB){
+	var customer []CustomerORM
+	// preload untuk otomatis mengambil data dari AccountORM
+	if err := db.Preload("AccountORM").Find(&customer).Error;err != nil {
+		log.Println("Failed",err.Error())
+		return
+	}
+	log.Println(customer)
+}
